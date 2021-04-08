@@ -1,7 +1,7 @@
 ---
 title: "Bat Activity Baseline Study Survey Report"
 author: "Kateryn Pino"
-output: html_document
+output: word_document
 ---
 
 ```{r setup, include=FALSE}
@@ -12,6 +12,8 @@ knitr::opts_chunk$set(echo = FALSE)
 
 library(tidyverse)
 library(skimr)
+library(janitor)
+library(ggplot2)
 
 ```
 
@@ -31,13 +33,22 @@ Since establishing the new environmental regulations, bat fauna has been conside
 
 
 ```{r, include = TRUE}
-Batactivity <- read_csv("DataBase.csv",
-                      col_types = list(Site_code = col_character(),
-                      Hour_activity = col_character(),
-                      Vegetation_type = col_character(),
-                      Watercourses = col_character()))
+Batactivity <- read_csv("DataBase.csv", 
+                        col_types = list(Hour_activity = col_character())) %>% 
+  clean_names()
+
+Batactivity <- Batactivity %>% 
+  mutate(watercourses =as.logical(watercourses))
+
 skim(Batactivity)
 
 ```
 
+```{r, include = TRUE}
+ggplot(data=Batactivity,
+       mapping = aes(x = hour_activity,
+                     y = bat_passes_number,
+                     fill = hour_activity)) +
+  geom_boxplot()
+```
 
