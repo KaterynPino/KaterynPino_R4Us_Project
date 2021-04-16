@@ -13,8 +13,8 @@ knitr::opts_chunk$set(echo = FALSE)
 library(tidyverse)
 library(skimr)
 library(janitor)
-library(ggplot2)
-
+library(hrbrthemes)
+library(viridis)
 ```
 
 
@@ -44,11 +44,22 @@ skim(Batactivity)
 
 ```
 
-```{r, include = TRUE}
+
+```{r, include = TRUE, echo=FALSE, warning=FALSE}
 ggplot(data=Batactivity,
        mapping = aes(x = hour_activity,
                      y = bat_passes_number,
-                     fill = hour_activity)) +
-  geom_boxplot()
-```
+                     fill=hour_activity, 
+                     color=hour_activity)) +
+  geom_violin(show.legend = FALSE) +
+  geom_jitter(alpha=0.7, show.legend = FALSE) + 
+  scale_fill_viridis(discrete = TRUE, alpha = 0.6, end = 0.8) +
+  scale_color_viridis(discrete = TRUE, end=0.8) +
+  scale_y_continuous(limits = c(0,15),
+                     breaks = seq(from=0, to=15, by=3)) +
+  labs(title = "Bat activity per hour at night",
+       x="Hour at night",
+       y= "Bat activity (passes number)") +
+theme_ipsum()
 
+```
