@@ -1,7 +1,9 @@
 ---
 title: "Bat Activity Baseline Study Survey Report"
 author: "Kateryn Pino"
-output: word_document
+output: html_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -46,15 +48,21 @@ skim(Batactivity)
 
 
 ```{r, include = TRUE, echo=FALSE, warning=FALSE}
+
+Batactivity <- Batactivity %>% 
+  rename(hour_activity_fct = hour_activity) %>% 
+  mutate(hour_activity_int = as.integer(hour_activity_fct)) %>% 
+  mutate(hour_activity_fct = fct_reorder(hour_activity_fct, hour_activity_int))
+
 ggplot(data=Batactivity,
-       mapping = aes(x = hour_activity,
-                     y = bat_passes_number,
-                     fill=hour_activity, 
-                     color=hour_activity)) +
-  geom_violin(show.legend = FALSE) +
-  geom_jitter(alpha=0.7, show.legend = FALSE) + 
-  scale_fill_viridis(discrete = TRUE, alpha = 0.6, end = 0.8) +
-  scale_color_viridis(discrete = TRUE, end=0.8) +
+       mapping = aes(x = hour_activity_fct,
+                     y = bat_passes_number)) +
+  geom_violin(show.legend = FALSE,
+              fill = "#d5f2d8") +
+  geom_jitter(alpha=0.7, show.legend = FALSE,
+              color = "#44f255") + 
+  # scale_fill_viridis(discrete = TRUE, alpha = 0.6, end = 0.8) +
+  # scale_color_viridis(discrete = TRUE, end=0.8) +
   scale_y_continuous(limits = c(0,15),
                      breaks = seq(from=0, to=15, by=3)) +
   labs(title = "Bat activity per hour at night",
